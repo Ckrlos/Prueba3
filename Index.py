@@ -38,7 +38,7 @@ def verificarEnteros(opciones=None):
 
 def menu():
         os.system('cls')
-        print(f"==== PIZZERIA DUOC ==== \n" 
+        print(f"==== PIZZERIA ==== \n" 
             "1. Venta \n"
             "2. Mostrar todas las ventas \n"
             "3. Buscar ventas por clientes \n"
@@ -50,7 +50,7 @@ def menu():
         return verificarEnteros([1,2,3,4,5,6,7,8])
     
 def tamaños():{
-      print("Ingrese el tamaño que desea comprar: \n"
+      print("Tamaño de pizza deseada: \n"
               "1. Pequeña \n"
               "2. Mediana \n"
               "3. Familiar")
@@ -58,10 +58,10 @@ def tamaños():{
 def opt1(): 
         global ventasId, ventasCollection
         os.system('cls')
-        cliente = input("Ingrese el nombre del cliente:\n: ")
+        cliente = input("nombre del cliente u alias:\n: ")
         os.system('cls')
 
-        print("Ingrese el tipo de pizza que desea comprar:\n")
+        print("Seleccione tipo pizza:\n")
         for idx, producto in enumerate(Pizzas, start=1):
             print(f" {idx}. {producto[0]}")
         eleccion = verificarEnteros(range(1, len(Pizzas) + 1))
@@ -72,11 +72,11 @@ def opt1():
         tamaño = list(producto[1].items())[eleccion-1]
         os.system('cls')
 
-        print("Ingrese unidades que desea comprar:")
+        print("Cuantas pizzas desea comprar:")
         cantidad = verificarEnteros()
         os.system('cls')
 
-        print("Ingrese el descuento que desea aplicar:\n")
+        print("Seleccione su rol:\n")
         for idx, (nombre, valor) in enumerate(descuentos.items(), start=1):
             print(f" {idx}. {nombre} / {valor * 100}%")
         eleccion = verificarEnteros(range(1, len(descuentos) + 1))
@@ -131,7 +131,7 @@ def opt3():
             print("Clientes registrados: \n")
             for name in clients:
                 print(name)
-            client = input("\nIngrese el nombre del cliente que desea buscar:\n: ")
+            client = input("\nIngrese el nombre u alias del cliente que desea buscar:\n: ")
             if client in clients:
                 os.system('cls')
                 print(f"=====================================\nVentas de {client}:\n")
@@ -160,7 +160,7 @@ def cargarVentas():
             print(f"{ventas[-1]['detalle']['id']} ventas cargadas con éxito desde {dbpath}." )
             return ventas, ventas[-1]['detalle']['id'] + 1 if ventas else 1
     except FileNotFoundError:
-        print(f"No se ha encontrado archivo .json que contenga las ventas.")
+        print(f"No se ha encontrado archivo .json.")
         return [], 1
     
 def opt5(): 
@@ -170,7 +170,7 @@ def opt5():
 
 def generarBoleta(detalleVenta):
     formatted_now = datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
-    boleta = (f"==== BOLETA DE VENTA ====\n"
+    boleta = (f"==== BOLETA ====\n"
               f"ID: {detalleVenta['id']}\n"
               f"Cliente: {detalleVenta['cliente']}\n"
               f"{detalleVenta['cantidad']} Pizza {detalleVenta['producto']} {detalleVenta['tamaño'][0]} \n"
@@ -179,7 +179,7 @@ def generarBoleta(detalleVenta):
               f"DESCUENTO: -{detalleVenta['dcto_monto']}\n"
               f"TOTAL: {detalleVenta['total']}\n"
               f"--------------------------------\n"
-              f"Gracias por su compra! \t\t {formatted_now}")
+              f"Gracias por comprar en la pizzeria! \t\t {formatted_now}")
     return boleta
 
 def opt6(): 
@@ -187,7 +187,7 @@ def opt6():
         print("No hay ventas registradas.")
     else:
         mostrarVentas()
-        print("\n Ingrese el ID de la venta que desea generar la boleta: ")
+        print("\n Ingrese el ID de la venta para generar la boleta: ")
         ventaId= verificarEnteros(range(1, ventasCollection[-1]['detalle']['id']+1))
         detalleVenta = ventasCollection[ventaId-1]['detalle']
         os.system('cls')
@@ -203,22 +203,22 @@ def opt7():
 while True:
     choice = menu()
     if choice == 1: #Ingresar venta
-        opt1() #Ingresa venta y guarda en diccionario
+        opt1() #Ingreso de nuevas ventas
         os.system('cls')
         print("Venta registrada con éxito.")
         input()
-    elif choice == 2: #Muestra las ventas
+    elif choice == 2: #Mostrar ventas almacenadas
         os.system('cls')
         opt2() 
         input()
-    elif choice == 3:#Buscar ventas por cliente
+    elif choice == 3:#Buscar x cliente
         os.system('cls')
         opt3()
-    elif choice == 4: #Guarda las ventas
+    elif choice == 4: #Guarda las ventas en un json
         os.system('cls')
         opt4()
         input()
-    elif choice == 5: #Carga las ventas
+    elif choice == 5: #Carga las ventas de un json
         os.system('cls')
         opt5()
         input()
@@ -226,9 +226,9 @@ while True:
         os.system('cls')
         opt6()
         input()
-    elif choice == 7:
+    elif choice == 7: #Anular venta
         os.system('cls')
         opt7()
         input()
-    elif choice == 8:
-        break
+    elif choice == 8: #Salir
+        exit()
